@@ -1,0 +1,111 @@
+---
+# This Playbook sets up a Vagrant Fedora 27 VM
+- hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: Update all Packages
+    dnf:
+      name: '*'
+      state: latest
+  - name: Install OpenShift Development Tools
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items:
+    - skopeo
+    - buildah
+    - docker
+    - maven
+    - java-1.8.0-openjdk-devel
+    - ansible
+    - podman
+    - libselinux-python
+#    - apb
+    - cri-o
+    - cri-tools
+
+  - name: Downloaded OpenShift Origin Client
+    unarchive:
+      src: https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz
+      remote_src: yes
+      dest: /usr/local/bin
+      mode: 0755
+      owner: root
+      group: root
+      extra_opts:
+        - --strip=1
+
+  - name: Download jq-linux64 1.5
+    ignore_errors: true
+    get_url:
+      url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+      dest: /usr/local/bin/jq
+      mode: 0755
+
+  - name: Install S2I Executable
+    unarchive:
+      src: https://github.com/openshift/source-to-image/releases/download/v1.1.10/source-to-image-v1.1.10-27f0729d-linux-amd64.tar.gz
+      remote_src: yes
+      dest: /usr/local/bin
+      owner: root
+      group: root
+      mode: 0755
+      extra_opts:
+        - --strip=1
+
+  - name: Install bash-git-prompt for root
+    git:
+      repo: https://github.com/magicmonty/bash-git-prompt.git
+      dest: /root/.bash-git-prompt
+      clone: yes
+
+  - name: Install bash-git-prompt for vagrant
+    git:
+      repo: https://github.com/magicmonty/bash-git-prompt.git
+      dest: /home/vagrant/.bash-git-prompt
+      clone: yes
+
+  - name: Change ownership of bash-git-prompt to vagrant
+    file:
+      path: /home/vagrant/.bash-git-prompt
+      owner: vagrant
+      group: vagrant
+      recurse: yes
+
+  - name: Install .bashrc for root
+    copy:
+      src: ./files/bashrc
+      dest: /root/.bashrc
+      mode: 0644
+      owner: root
+      group: root
+
+  - name: Install .bashrc for vagrant
+    copy:
+      src: ./files/bashrc
+      dest: /home/vagrant/.bashrc
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+  - name: Install .bash_profile for root
+    copy:
+      src: ./files/bash_profile
+      dest: /root/.bash_profile
+      mode: 0644
+      owner: root
+
+  - name: Install .bash_profile for vagrant
+    copy:
+      src: ./files/bash_profile
+      dest: /home/vagrant/.bash_profile
+      mode: 0644
+      owner: vagrant
+      group: vagrant
+
+  - name: Enable and start Docker
+    systemd:
+      name: docker
+      state: started
+      enabled: yes
