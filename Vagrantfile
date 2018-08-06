@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Fedora 28 Vagrant box:
+box = "generic/fedora28"
+
 # set to taste
 hostname = "fedoravm"
 ip = "192.168.10.10"
@@ -8,9 +11,6 @@ ip = "192.168.10.10"
 # optional - set to taste
 local_folder = "~/Development"
 remote_mount = "/home/vagrant/development"
-
-# Fedora 28 Vagrant box:
-box = "generic/fedora28"
 
 # set with one or more keys
 ssh_keys = ["~/.vagrant.d/insecure_private_key", "~/.ssh/vagrant.pem" ]
