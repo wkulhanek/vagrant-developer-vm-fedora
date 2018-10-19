@@ -10,23 +10,24 @@
       state: latest
   - name: Install OpenShift Development Tools
     dnf:
-      name: "{{ item }}"
       state: present
-    with_items:
-    - skopeo
-    - buildah
-    - docker
-    - maven
-    - java-1.8.0-openjdk-devel
-    - ansible
-    - podman
-    - libselinux-python
-    - cri-o
-    - cri-tools
+      name:
+        - git
+        - skopeo
+        - buildah
+        - docker
+        - maven
+        - java-1.8.0-openjdk-devel
+        - ansible
+        - podman
+        - libselinux-python
+        - cri-o
+        - cri-tools
+        - vim
 
   - name: Downloaded OpenShift Origin Client
     unarchive:
-      src: https://github.com/openshift/origin/releases/download/v3.10.0/openshift-origin-client-tools-v3.10.0-dd10d17-linux-64bit.tar.gz
+      src: https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
       remote_src: yes
       dest: /usr/local/bin
       mode: 0755
@@ -44,7 +45,7 @@
 
   - name: Install S2I Executable
     unarchive:
-      src: https://github.com/openshift/source-to-image/releases/download/v1.1.10/source-to-image-v1.1.10-27f0729d-linux-amd64.tar.gz
+      src: https://github.com/openshift/source-to-image/releases/download/v1.1.12/source-to-image-v1.1.12-2a783420-linux-amd64.tar.gz
       remote_src: yes
       dest: /usr/local/bin
       owner: root
@@ -111,6 +112,14 @@
       mode: 0644
       owner: vagrant
       group: vagrant
+
+  - name: Create /etc/containers/registries.conf
+    file:
+      src: ./files/registries.conf
+      dest: /etc/containers/registries.conf
+      owner: root
+      group: root
+      mode: 0644
 
   - name: Enable and start Docker
     systemd:
