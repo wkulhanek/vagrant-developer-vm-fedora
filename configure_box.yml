@@ -23,6 +23,7 @@
         - libselinux-python
         - cri-o
         - cri-tools
+        - compat-openssl10
         - vim
 
   - name: Downloaded OpenShift Origin Client
