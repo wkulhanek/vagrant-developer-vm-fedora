@@ -24,6 +24,7 @@
         - cri-o
         - cri-tools
         - compat-openssl10
+        - bash-completion
         - vim
 
   - name: Downloaded OpenShift Origin Client
