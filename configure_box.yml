@@ -47,7 +47,7 @@
 
   - name: Install S2I Executable
     unarchive:
-      src: https://github.com/openshift/source-to-image/releases/download/v1.1.12/source-to-image-v1.1.12-2a783420-linux-amd64.tar.gz
+      src: https://github.com/openshift/source-to-image/releases/download/v1.1.13/source-to-image-v1.1.13-b54d75d3-linux-amd64.tar.gz
       remote_src: yes
       dest: /usr/local/bin
       owner: root
