@@ -1,8 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Fedora 32 Vagrant box:
-#box = "generic/fedora32"
+# Fedora 33 Vagrant box:
 box = "generic/fedora33"
 
 # set to taste
